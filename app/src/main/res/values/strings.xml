@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Appiadas</string>
+
+    <string name="request_error">Sorry, we had an error requesting the joke</string>
+    <string name="save_error">Sorry, we had an error saving the joke</string>
+    <string name="delete_error">Sorry, we had an error deleting the joke</string>
+</resources>
