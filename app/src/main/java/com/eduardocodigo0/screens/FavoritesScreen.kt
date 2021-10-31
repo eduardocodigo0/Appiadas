@@ -1,6 +1,5 @@
 package com.eduardocodigo0.screens
 
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,20 +7,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.materialIcon
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,9 +41,10 @@ fun FavoritesScreen() {
         }
         is UiStates.Success -> {
             val jokeList = (stateView as UiStates.Success<List<Joke>>).content
-            JokeList(list = jokeList){
+            JokeList(list = jokeList) {
                 favoriteViewModel.deleteJoke(it)
             }
+
         }
 
         is UiStates.Error -> {
@@ -58,11 +52,12 @@ fun FavoritesScreen() {
         }
     }
 
-    if(wasJokeDeleted){
+    if (wasJokeDeleted) {
         Toast.makeText(LocalContext.current, "Joke deleted!", Toast.LENGTH_SHORT).show()
         favoriteViewModel.resetDeletedJokesState()
         favoriteViewModel.getJokeList()
     }
+
 
 }
 
@@ -72,6 +67,18 @@ fun JokeListItem(joke: Joke, action: (Joke) -> Unit) {
     var expanded by remember {
         mutableStateOf(false)
     }
+
+    var isDialogOpen by remember {
+        mutableStateOf(false)
+    }
+    if (isDialogOpen) {
+        DeleteJokeDialog(delete = {
+            action(joke)
+        },{
+            isDialogOpen = false
+        })
+    }
+
 
     Card(
         modifier = Modifier
@@ -103,7 +110,7 @@ fun JokeListItem(joke: Joke, action: (Joke) -> Unit) {
                             .align(Alignment.CenterEnd)
                             .clickable(
                                 onClick = {
-                                    action(joke)
+                                    isDialogOpen = true
                                 }
                             ),
                     )
@@ -115,7 +122,9 @@ fun JokeListItem(joke: Joke, action: (Joke) -> Unit) {
                 Text(text = "${joke.setup}")
 
                 if (expanded) {
-                    Spacer(modifier = Modifier.fillMaxWidth().padding(8.dp))
+                    Spacer(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp))
                     Text(text = "${joke.delivery}")
                 } else {
                     Image(
@@ -146,5 +155,39 @@ fun JokeList(list: List<Joke>, action: (Joke) -> Unit) {
                 JokeListItem(joke = joke, action = action)
             }
         }
+    }
+}
+
+@Composable
+fun DeleteJokeDialog(delete: () -> Unit, dismiss: () -> Unit) {
+    var isOpen by remember {
+        mutableStateOf(true)
+    }
+    if (isOpen) {
+        AlertDialog(
+            onDismissRequest = {
+                isOpen = false
+                dismiss()
+            },
+            title = { Text(text = "Delete") },
+            text = { Text(text = "Do you want to delete this joke?") },
+            confirmButton = {
+                Button(onClick = {
+                    delete()
+                    isOpen = false
+                    dismiss()
+                }, contentPadding = PaddingValues(8.dp)) {
+                    Text(text = "Yes", Modifier.padding(8.dp))
+                }
+            },
+            dismissButton = {
+                Button(onClick = {
+                    isOpen = false
+                    dismiss()
+                }, contentPadding = PaddingValues(8.dp)) {
+                    Text(text = "No", Modifier.padding(8.dp))
+                }
+            }
+        )
     }
 }

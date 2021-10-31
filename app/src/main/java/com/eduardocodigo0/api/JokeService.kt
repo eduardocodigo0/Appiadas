@@ -4,7 +4,6 @@ import com.eduardocodigo0.BASE_API_PATH
 import com.eduardocodigo0.RANDOM_PATH
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import retrofit2.http.GET
 
 interface JokeService {
