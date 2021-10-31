@@ -3,5 +3,21 @@
 
     <string name="request_error">Sorry, we had an error requesting the joke</string>
     <string name="save_error">Sorry, we had an error saving the joke</string>
+    <string name="save_success">Joke saved</string>
     <string name="delete_error">Sorry, we had an error deleting the joke</string>
+    <string name="delete_success">Joke deleted!</string>
+    <string name="database_error">Database Error!</string>
+    <string name="internet_error">Internet error</string>
+    <string name="main_button_text">Click here for a random Joke</string>
+    <string name="random_joke_card_title">Random Joke</string>
+    <string name="heart_img_content_description">Heart</string>
+    <string name="delete_img_content_description">Delete</string>
+    <string name="expand_img_content_description">Expand</string>
+    <string name="save_button_text">Save Joke</string>
+    <string name="yes_button_text">Yes</string>
+    <string name="no_button_text">No</string>
+    <string name="delete_card_title">Delete</string>
+    <string name="delete_card_msg">Do you want to delete this joke?</string>
+    <string name="card_id">ID: %1$s</string>
+
 </resources>

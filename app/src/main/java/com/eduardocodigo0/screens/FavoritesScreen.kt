@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,12 +49,14 @@ fun FavoritesScreen() {
         }
 
         is UiStates.Error -> {
-            Toast.makeText(LocalContext.current, "Database Error!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(LocalContext.current,
+                stringResource(id = R.string.database_error),
+                Toast.LENGTH_SHORT).show()
         }
     }
 
     if (wasJokeDeleted) {
-        Toast.makeText(LocalContext.current, "Joke deleted!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(LocalContext.current, R.string.delete_success, Toast.LENGTH_SHORT).show()
         favoriteViewModel.resetDeletedJokesState()
         favoriteViewModel.getJokeList()
     }
@@ -74,7 +77,7 @@ fun JokeListItem(joke: Joke, action: (Joke) -> Unit) {
     if (isDialogOpen) {
         DeleteJokeDialog(delete = {
             action(joke)
-        },{
+        }, {
             isDialogOpen = false
         })
     }
@@ -93,7 +96,7 @@ fun JokeListItem(joke: Joke, action: (Joke) -> Unit) {
                     .background(colorResource(id = R.color.purple_500))
                     .fillMaxWidth()) {
                     Text(
-                        text = "ID: ${joke.uid}",
+                        text = stringResource(id = R.string.card_id,"${joke.uid}"),
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
                         fontSize = 12.sp,
@@ -104,7 +107,7 @@ fun JokeListItem(joke: Joke, action: (Joke) -> Unit) {
 
                     Image(
                         painter = painterResource(id = R.drawable.ic_delete),
-                        contentDescription = "Delete",
+                        contentDescription = stringResource(id = R.string.delete_img_content_description),
                         modifier = Modifier
                             .padding(8.dp)
                             .align(Alignment.CenterEnd)
@@ -129,7 +132,7 @@ fun JokeListItem(joke: Joke, action: (Joke) -> Unit) {
                 } else {
                     Image(
                         painter = painterResource(id = R.drawable.ic_expand),
-                        contentDescription = "Delete",
+                        contentDescription = stringResource(id = R.string.expand_img_content_description),
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .fillMaxWidth()
@@ -169,15 +172,16 @@ fun DeleteJokeDialog(delete: () -> Unit, dismiss: () -> Unit) {
                 isOpen = false
                 dismiss()
             },
-            title = { Text(text = "Delete") },
-            text = { Text(text = "Do you want to delete this joke?") },
+            title = { Text(text = stringResource(id = R.string.delete_card_title)) },
+            text = { Text(text = stringResource(id = R.string.delete_card_msg)) },
             confirmButton = {
                 Button(onClick = {
                     delete()
                     isOpen = false
                     dismiss()
                 }, contentPadding = PaddingValues(8.dp)) {
-                    Text(text = "Yes", Modifier.padding(8.dp))
+                    Text(text = stringResource(id = R.string.yes_button_text),
+                        Modifier.padding(8.dp))
                 }
             },
             dismissButton = {
@@ -185,7 +189,8 @@ fun DeleteJokeDialog(delete: () -> Unit, dismiss: () -> Unit) {
                     isOpen = false
                     dismiss()
                 }, contentPadding = PaddingValues(8.dp)) {
-                    Text(text = "No", Modifier.padding(8.dp))
+                    Text(text = stringResource(id = R.string.no_button_text),
+                        Modifier.padding(8.dp))
                 }
             }
         )

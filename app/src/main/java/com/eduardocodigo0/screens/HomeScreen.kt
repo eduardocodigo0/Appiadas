@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,7 +36,7 @@ fun HomeScreen() {
         is UiStates.Idle -> {
         }
         is UiStates.Error -> {
-            Toast.makeText(LocalContext.current, "Internet error", Toast.LENGTH_SHORT).show()
+            Toast.makeText(LocalContext.current, stringResource(id = R.string.internet_error), Toast.LENGTH_SHORT).show()
         }
         is UiStates.Loading -> {
         }
@@ -69,7 +70,7 @@ fun HomeScreen() {
                         .size(160.dp)
 
                 ) {
-                    Text("Click here for a random Joke",
+                    Text(stringResource(id = R.string.main_button_text),
                         textAlign = TextAlign.Center,
                         color = Color.White)
                 }
@@ -78,7 +79,7 @@ fun HomeScreen() {
 
             if (wasJokeSaved) {
                 jokeViewModel.resetJokeSavedState()
-                Toast.makeText(LocalContext.current, "Joke saved", Toast.LENGTH_SHORT).show()
+                Toast.makeText(LocalContext.current, stringResource(id = R.string.save_success), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -96,7 +97,7 @@ fun JokeDialog(joke: Joke, save: () -> Unit, dismis: () -> Unit) {
                 isOpen = false
                 dismis()
             },
-            title = { Text(text = "Random Joke") },
+            title = { Text(text = stringResource(id = R.string.random_joke_card_title)) },
             text = { Text(text = "${joke.setup}\n${joke.delivery}") },
             confirmButton = {
                 Button(onClick = {
@@ -106,10 +107,10 @@ fun JokeDialog(joke: Joke, save: () -> Unit, dismis: () -> Unit) {
                     Image(
 
                         painter = painterResource(R.drawable.ic_heart),
-                        contentDescription = "Heart",
+                        contentDescription = stringResource(id = R.string.heart_img_content_description),
                         Modifier.padding(8.dp))
 
-                    Text(text = "Save Joke", Modifier.padding(8.dp))
+                    Text(text = stringResource(id = R.string.save_button_text), Modifier.padding(8.dp))
                 }
             }
         )
