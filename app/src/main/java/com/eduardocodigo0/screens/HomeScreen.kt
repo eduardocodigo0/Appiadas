@@ -35,7 +35,7 @@ fun HomeScreen() {
         is UiStates.Idle -> {
         }
         is UiStates.Error -> {
-            Snackbar((stateView as UiStates.Error).errorMsg)
+            Toast.makeText(LocalContext.current, "Internet error", Toast.LENGTH_SHORT).show()
         }
         is UiStates.Loading -> {
         }
@@ -116,14 +116,6 @@ fun JokeDialog(joke: Joke, save: () -> Unit, dismis: () -> Unit) {
     }
 }
 
-@Composable
-fun Snackbar(msg: String) {
-    Column(horizontalAlignment = Alignment.End) {
-        Snackbar(
-            modifier = Modifier.padding(8.dp)
-        ) { Text(text = msg) }
-    }
-}
 
 @Composable
 fun ProgressIndicator(state: UiStates<Joke>, modifier: Modifier = Modifier) {
