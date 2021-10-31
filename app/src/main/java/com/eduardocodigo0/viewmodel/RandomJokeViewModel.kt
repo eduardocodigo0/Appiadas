@@ -1,7 +1,6 @@
 package com.eduardocodigo0.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eduardocodigo0.db.Joke
 import com.eduardocodigo0.db.JokeRepository
@@ -10,9 +9,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class RandomJokeViewModel(application: Application): AndroidViewModel(application)  {
+class RandomJokeViewModel(val repository: JokeRepository): ViewModel() {
 
-    private val repository = JokeRepository(application)
 
     private val _viewState = MutableStateFlow<UiStates<Joke>>(UiStates.Idle())
     val viewState get() = _viewState
@@ -46,9 +44,13 @@ class RandomJokeViewModel(application: Application): AndroidViewModel(applicatio
     }
 
     private suspend fun requestAndEmitJoke(){
-        _viewState.value = UiStates.Success(
-            repository.getRandomJoke().toJoke()
-        )
+        var joke = repository.getRandomJoke().toJoke()
+        var count = 10
+        while(joke.setup == null && count > 0){
+            joke = repository.getRandomJoke().toJoke()
+            count -= 1
+        }
+        _viewState.value = UiStates.Success(joke)
     }
 
     private fun emitErrorMsg(err: Exception){
@@ -63,6 +65,10 @@ class RandomJokeViewModel(application: Application): AndroidViewModel(applicatio
 
     fun setIdleState(){
         _viewState.value = UiStates.Idle()
+    }
+
+    fun resetJokeSavedState(){
+        _jokeSaved.value = false
     }
 
 

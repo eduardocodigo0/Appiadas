@@ -1,7 +1,6 @@
 package com.eduardocodigo0.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eduardocodigo0.db.Joke
 import com.eduardocodigo0.db.JokeRepository
@@ -10,8 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class FavoriteJokesViewModel(application: Application): AndroidViewModel(application) {
-    private val repository = JokeRepository(application)
+class FavoriteJokesViewModel(val repository: JokeRepository): ViewModel() {
 
     private val _viewState = MutableStateFlow<UiStates<List<Joke>>>(UiStates.Idle())
     val viewState get() = _viewState
@@ -31,7 +29,7 @@ class FavoriteJokesViewModel(application: Application): AndroidViewModel(applica
         }
     }
 
-    fun getRandomJoke(){
+    fun getJokeList(){
         viewModelScope.launch(Dispatchers.IO){
             setLoadingState()
 
@@ -57,6 +55,10 @@ class FavoriteJokesViewModel(application: Application): AndroidViewModel(applica
 
     private fun setLoadingState(){
         _viewState.value = UiStates.Loading()
+    }
+
+    fun resetDeletedJokesState(){
+        _jokeDeleted.value = false
     }
 
     fun setIdleState(){
