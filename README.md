@@ -1,5 +1,5 @@
 # Appiadas
-Random joke app made with jetpack compose, retrofit and room.
+Random joke app made with the [joke api](https://sv443.net/jokeapi/v2/)
 
 ## Tools
 * Retrofit
